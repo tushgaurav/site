@@ -1,4 +1,4 @@
-baseURL: https://tushgaurav.in/
+baseURL: https://tushgaurav.com/
 languageCode: en-us
 title: Tushar Gaurav - Software Developer & Designer
 theme: "PaperMod"
@@ -115,7 +115,7 @@ params:
       url: "https://www.instagram.com/tushgaurav/"
 
   editPost:
-    URL: "https://github.com/tushgaurav/tushgaurav.in/tree/main/content/"
+    URL: "https://github.com/tushgaurav/site/tree/main/content/"
     Text: "Suggest Changes" # edit text
     appendFilePath: true # to append file path to Edit link
 
