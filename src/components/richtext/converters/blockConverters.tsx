@@ -1,9 +1,11 @@
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
 import { SerializedBlockNode } from '@payloadcms/richtext-lexical'
-import { CodeBlock } from '@/blocks/Code/Component'
+import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 
-export const blockConverter: JSXConverters<SerializedBlockNode> = {
+export const blockConverter: JSXConverters<SerializedBlockNode<CodeBlockProps>> = {
   blocks: {
-    code: ({ node }) => <CodeBlock {...node.fields} />,
+    code: ({ node }: { node: SerializedBlockNode<CodeBlockProps> }) => (
+      <CodeBlock {...node.fields} />
+    ),
   },
 }
