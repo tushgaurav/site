@@ -66,6 +66,52 @@ export async function generateMetadata({
   }
 }
 
+async function getArticleMarkdown(content: any, payloadConfig: any) {
+  try {
+    // Create a copy of the content without custom blocks for markdown conversion
+    const contentCopy = JSON.parse(JSON.stringify(content))
+
+    // Recursively remove block nodes that aren't supported by markdown
+    const removeUnsupportedBlocks = (node: any): any => {
+      if (!node) return node
+
+      if (node.type === 'block') {
+        // Replace block nodes with a placeholder
+        return {
+          type: 'paragraph',
+          children: [{
+            type: 'text',
+            text: `[${node.fields?.blockType || 'block'}: content not included in markdown]`,
+            format: 0,
+            version: 1
+          }],
+          format: '',
+          indent: 0,
+          version: 1
+        }
+      }
+
+      if (node.children) {
+        node.children = node.children.map(removeUnsupportedBlocks).filter(Boolean)
+      }
+
+      return node
+    }
+
+    if (contentCopy.root?.children) {
+      contentCopy.root.children = contentCopy.root.children.map(removeUnsupportedBlocks).filter(Boolean)
+    }
+
+    return convertLexicalToMarkdown({
+      data: contentCopy,
+      editorConfig: await editorConfigFactory.default({ config: payloadConfig }),
+    })
+  } catch (error) {
+    console.error('Error converting to markdown:', error)
+    return '<!-- Unable to convert article to markdown -->'
+  }
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const payloadConfig = await config
@@ -132,14 +178,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       <Separator className="mt-4 mb-8" />
       <div className="flex items-center gap-2">
-        <CopyMarkdown markdown={
-          convertLexicalToMarkdown({
-            data: article.content,
-            editorConfig: await editorConfigFactory.default(
-              { config: await config }
-            )
-          })
-        } />
+        <CopyMarkdown markdown={await getArticleMarkdown(article.content, payloadConfig)} />
       </div>
     </Page>
   )

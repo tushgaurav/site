@@ -28,16 +28,6 @@ export const listConverter: JSXConverters<SerializedListNode | SerializedListIte
   },
 }
 
-export const codeConverter: JSXConverters<SerializedBlockNode> = {
-  code: ({ node, nodesToJSX }) => {
-    return (
-      <pre>
-        <code>{nodesToJSX({ nodes: node.children })}</code>
-      </pre>
-    )
-  },
-}
-
 export const quoteConverter: JSXConverters<SerializedQuoteNode> = {
   quote: ({ node, nodesToJSX }) => {
     return (

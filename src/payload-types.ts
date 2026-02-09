@@ -737,6 +737,32 @@ export interface AboutSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language:
+    | 'typescript'
+    | 'tsx'
+    | 'javascript'
+    | 'jsx'
+    | 'python'
+    | 'c'
+    | 'css'
+    | 'html'
+    | 'json'
+    | 'yaml'
+    | 'markdown'
+    | 'shell'
+    | 'sql'
+    | 'other';
+  code: string;
+  filename?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {

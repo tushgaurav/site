@@ -5,12 +5,9 @@ export const Code: Block = {
   interfaceName: 'CodeBlock',
   fields: [
     {
-      name: 'filename',
-      type: 'text',
-    },
-    {
       name: 'language',
       type: 'select',
+      label: 'Language',
       options: [
         { label: 'TypeScript', value: 'typescript' },
         { label: 'TypeScript React', value: 'tsx' },
@@ -28,12 +25,22 @@ export const Code: Block = {
         { label: 'Other', value: 'other' },
       ],
       defaultValue: 'typescript',
+      required: true,
     },
     {
       name: 'code',
-      type: 'code',
-      label: false,
+      type: 'textarea',
+      label: 'Code',
       required: true,
+      admin: {
+        rows: 10,
+        placeholder: 'Paste your code here...',
+      },
+    },
+    {
+      name: 'filename',
+      type: 'text',
+      label: 'Filename (optional)',
     },
   ],
 }

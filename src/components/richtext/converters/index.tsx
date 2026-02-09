@@ -5,7 +5,6 @@ import { headingConverter } from '@/components/richtext/converters/headingConver
 import {
   paragraphConverter,
   listConverter,
-  codeConverter,
   quoteConverter,
   linebreakConverter,
 } from '@/components/richtext/converters/textConverters'
@@ -14,6 +13,7 @@ import {
   uploadConverter,
   horizontalRuleConverter,
 } from '@/components/richtext/converters/mediaConverters'
+import { blockConverter } from '@/components/richtext/converters/blockConverters'
 
 type NodeTypes = DefaultNodeTypes
 
@@ -22,10 +22,10 @@ export const jsxConverter: JSXConvertersFunction<NodeTypes> = ({ defaultConverte
   ...headingConverter,
   ...paragraphConverter,
   ...listConverter,
-  ...codeConverter,
   ...quoteConverter,
   ...linebreakConverter,
   ...inlineConverters,
   ...uploadConverter,
   ...horizontalRuleConverter,
+  ...blockConverter,
 })

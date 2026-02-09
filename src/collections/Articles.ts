@@ -1,5 +1,10 @@
 import type { CollectionConfig } from 'payload'
-import { FixedToolbarFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  BlocksFeature,
+  FixedToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+import { Code } from '@/blocks/Code/config'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
@@ -127,7 +132,13 @@ export const Articles: CollectionConfig = {
       required: true,
       label: 'Article Content',
       editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [...defaultFeatures, FixedToolbarFeature()],
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          FixedToolbarFeature(),
+          BlocksFeature({
+            blocks: [Code],
+          }),
+        ],
       }),
     },
     {

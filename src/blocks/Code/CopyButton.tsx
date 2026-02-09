@@ -12,10 +12,11 @@ export default function CopyButton({ code }: { code: string }) {
     await navigator.clipboard.writeText(code)
     setCopied(true)
     toast.success('Code copied to clipboard')
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
-    <Button variant="outline" size="icon" onClick={handleCopy}>
+    <Button variant="ghost" size="icon" onClick={handleCopy} className="h-8 w-8">
       {copied ? <ClipboardCheck className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
     </Button>
   )

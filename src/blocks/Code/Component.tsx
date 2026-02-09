@@ -12,8 +12,13 @@ export type CodeBlockProps = {
 type Props = CodeBlockProps & { className?: string }
 
 export const CodeBlock: React.FC<Props> = ({ className, code, language, filename }: Props) => {
+  // Handle cases where code might be undefined or null
+  if (!code) {
+    return null
+  }
+
   return (
-    <div className={cn('bg-muted p-4 rounded-md', className)}>
+    <div className={cn(className)}>
       <Code code={code} language={language} filename={filename} />
     </div>
   )
