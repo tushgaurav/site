@@ -131,25 +131,32 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <Page>
-      <div className="flex items-center flex-wrap gap-2 lg:gap-4 mt-10">
-        {article.tags?.map((tag) => (
-          <Badge key={tag}>{tag}</Badge>
-        ))}
-
-        <div className="text-muted-foreground text-sm font-semibold uppercase">
-          {new Date(article.publishedAt!).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })}
+      <div className="flex flex-col gap-2 lg:gap-4 mt-6 md:mt-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {article.tags?.map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+          </div>
+          <div className="hidden md:block">
+            <DocsCopyPage url={`https://www.tushgaurav.com/article/${slug}`} />
+          </div>
         </div>
-        <span className="mx-2 text-muted-foreground/40">|</span>
-        <div className="text-muted-foreground text-sm font-semibold uppercase">
-          {article.readingTime} min read
-        </div>
-
-        <div className="lg:ml-auto">
-          <DocsCopyPage url={`https://www.tushgaurav.com/article/${slug}`} />
+        <div className="flex items-center flex-wrap gap-2 lg:gap-4">
+          <div className="text-muted-foreground text-sm font-semibold uppercase">
+            {new Date(article.publishedAt!).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </div>
+          <span className="text-muted-foreground/40">|</span>
+          <div className="text-muted-foreground text-sm font-semibold uppercase">
+            {article.readingTime} min read
+          </div>
+          <div className="md:hidden">
+            <DocsCopyPage url={`https://www.tushgaurav.com/article/${slug}`} />
+          </div>
         </div>
       </div>
       <PageTitle>{article.title}</PageTitle>
