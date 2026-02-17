@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { type ComponentPropsWithoutRef, type ReactNode, useState } from 'react'
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon, Menu, X, type LucideIcon } from 'lucide-react'
+import { type ComponentPropsWithoutRef, type ReactNode, useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
 import { AnimatedThemeToggler } from '../animated-theme-toggle'
 import { ModeToggle } from '../theme-toggle'
@@ -18,6 +18,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 const aboutLinks = [
   {
@@ -55,11 +57,24 @@ const mobileNavLinks = [
 ]
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const isMobile = useIsMobile()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const height = document.body.scrollHeight - document.documentElement.clientHeight
+      setScrolled(window.scrollY / height * 100)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])  
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className={
+      cn("fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border")
+    }>
       <nav className="flex justify-between items-center p-4 py-4 max-w-7xl mx-auto">
         <Link href="/" className="z-50">
           <Image
@@ -168,6 +183,16 @@ export default function Navbar() {
               <ModeToggle />
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Scroll progress indicator*/}
+      {pathname.includes('/article/') && (
+        <div className="h-[2px] bg-muted/30 hidden md:block">
+          <div
+            className="h-full bg-primary/40 transition-[width] duration-150 ease-out"
+            style={{ width: `${scrolled}%` }}
+          />
         </div>
       )}
     </header>
