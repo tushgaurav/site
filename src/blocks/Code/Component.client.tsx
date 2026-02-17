@@ -30,10 +30,10 @@ export const Code: React.FC<Props> = ({ code, language = 'typescript', filename 
       )}
 
       {/* Code block */}
-      <Highlight theme={themes.oneDark} code={code} language={language}>
+      <Highlight theme={themes.gruvboxMaterialDark} code={code} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={`${className} overflow-x-auto p-4 ${filename || language ? 'rounded-b-lg' : 'rounded-lg'} border border-border ${filename || language ? 'border-t-0' : ''}`}
+            className={`${className} text-sm overflow-x-auto p-4 ${filename || language ? 'rounded-b-lg' : 'rounded-lg'} border border-border ${filename || language ? 'border-t-0' : ''}`}
             style={style}
           >
             {!filename && !language && (

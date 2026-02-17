@@ -11,7 +11,7 @@ export default function CopyButton({ code }: { code: string }) {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code)
     setCopied(true)
-    toast.success('Code copied to clipboard')
+    toast.success('Code copied to clipboard.')
     setTimeout(() => setCopied(false), 2000)
   }
 
