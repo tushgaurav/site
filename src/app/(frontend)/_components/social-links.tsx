@@ -36,8 +36,6 @@ export default async function SocialLinks() {
     collection: 'social-links',
   })
 
-  console.log(socialLinks)
-
   return (
     <div className="flex gap-4 mb-12">
       {socialLinks.map((socialLink) => (
