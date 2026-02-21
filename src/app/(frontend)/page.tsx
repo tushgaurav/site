@@ -1,6 +1,4 @@
 import { getPayload } from 'payload'
-import React from 'react'
-
 import config from '@/payload.config'
 import ArticlesSection from './_components/articles'
 import { Page, PageTitle, Paragraph } from '@/components/page'
