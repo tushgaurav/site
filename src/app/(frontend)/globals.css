@@ -199,3 +199,12 @@
   animation: none;
   mix-blend-mode: normal;
 }
+
+@utility prose {
+  code {
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+}
