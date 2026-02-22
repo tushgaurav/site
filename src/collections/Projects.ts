@@ -57,5 +57,10 @@ export const Projects: CollectionConfig = {
         revalidatePath('/projects')
       }
     ],
+    afterDelete: [
+      (args)  => {
+        revalidatePath('/projects')
+      }
+    ],
   },
 }

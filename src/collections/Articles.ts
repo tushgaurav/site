@@ -200,12 +200,22 @@ export const Articles: CollectionConfig = {
             return 1
           },
         ],
-        afterChange: [
-          (args)  => {
-            revalidatePath('/')
-          }
-        ],
+      
       },
     },
   ],
+  hooks: {
+    afterChange: [
+      (args)  => {
+        revalidatePath('/')
+        revalidatePath('/archive')
+      }
+    ],
+    afterDelete: [
+      (args)  => {
+        revalidatePath('/')
+        revalidatePath('/archive')
+      }
+    ],
+  }
 }

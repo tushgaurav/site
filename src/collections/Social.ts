@@ -44,5 +44,10 @@ export const SocialLinks: CollectionConfig = {
         revalidatePath('/')
       }
     ],
+    afterDelete: [
+      (args)  => {
+        revalidatePath('/')
+      }
+    ],
   },
 }
