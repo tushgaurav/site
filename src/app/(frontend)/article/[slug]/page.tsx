@@ -182,8 +182,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <ShareThis />
         </aside>
       </div>
-      {errror}
-
       <Separator className="mt-4 mb-8" />
       <div className="flex items-center gap-2">
         <CopyMarkdown markdown={await getArticleMarkdown(article.content, payloadConfig)} />
