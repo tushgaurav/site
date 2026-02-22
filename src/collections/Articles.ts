@@ -5,6 +5,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { Code } from '@/blocks/Code/config'
+import { revalidatePath } from 'next/cache'
 
 export const Articles: CollectionConfig = {
   slug: 'articles',
@@ -198,6 +199,11 @@ export const Articles: CollectionConfig = {
             }
             return 1
           },
+        ],
+        afterChange: [
+          (args)  => {
+            revalidatePath('/')
+          }
         ],
       },
     },
