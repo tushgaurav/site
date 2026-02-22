@@ -1,26 +1,21 @@
-import { getPayload } from 'payload'
-import config from '@/payload.config'
-import type { Media } from '@/payload-types'
+'use client'
+import type { Media, Article } from '@/payload-types' // make sure Article is imported if you have it
 import Image from 'next/image'
 import Link from 'next/link'
+import { use } from 'react'
 
-export default async function ArticlesSection() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
+// Adjust this type based on what payload.find() returns for your setup
+type ArticlesResponse = {
+  docs: any[] // Ideally replace `any` with your `Article` type
+}
 
-  const { docs: articles } = await payload.find({
-    collection: 'articles',
-    where: {
-      status: {
-        equals: 'published',
-      },
-      unlisted: {
-        equals: false,
-      },
-    },
-    sort: '-publishedAt',
-    limit: 6,
-  })
+export default function ArticlesSectionClient({
+  articlesPromise,
+}: {
+  articlesPromise: Promise<ArticlesResponse>
+}) {
+  // 1. Unwrap the data promise using `use`
+  const { docs: articles } = use(articlesPromise)
 
   if (!articles || articles.length === 0) {
     return (
