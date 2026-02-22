@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 
 export const SocialLinks: CollectionConfig = {
@@ -37,4 +38,11 @@ export const SocialLinks: CollectionConfig = {
         },
     }
   ],
+  hooks: {
+    afterChange: [
+      (args)  => {
+        revalidatePath('/')
+      }
+    ],
+  },
 }

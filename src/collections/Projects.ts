@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 
 export const Projects: CollectionConfig = {
@@ -50,4 +51,11 @@ export const Projects: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [
+      (args)  => {
+        revalidatePath('/projects')
+      }
+    ],
+  },
 }
