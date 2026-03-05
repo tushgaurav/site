@@ -31,11 +31,11 @@ export async function GET() {
     for (const article of articles.docs) {
         feed.item({
             title: article.title,
-            description: article.excerpt,
+            description: article.excerpt || '',
             url: `https://www.tushgaurav.com/article/${article.slug}`,
-            categories: article.categories,
+            categories: article.categories || [],
             author: 'Tushar Gaurav',
-            date: article.publishedAt,
+            date: article.publishedAt || new Date().toISOString(),
         })
     }
 
