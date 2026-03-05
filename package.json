@@ -79,6 +79,7 @@
     "@types/node": "^22.5.4",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "@types/rss": "^0.0.32",
     "@types/three": "^0.181.0",
     "@vitejs/plugin-react": "4.5.2",
     "eslint": "^9.16.0",
