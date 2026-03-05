@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { SiGithub, SiDeviantart, SiMastodon, SiTwitch } from '@icons-pack/react-simple-icons'
+import { SiGithub, SiDeviantart, SiMastodon, SiTwitch, SiRss } from '@icons-pack/react-simple-icons'
 import { SiX } from '@icons-pack/react-simple-icons'
 import { Linkedin } from 'lucide-react'
 import { getPayload } from 'payload'
@@ -49,6 +49,9 @@ export default async function SocialLinks() {
           {getIcon(socialLink['si-icon-name'] || socialLink.platform)}
         </Link>
       ))}
+      <Link href="/feed.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <SiRss aria-label="RSS Feed" />
+      </Link>
     </div>
   )
 }
