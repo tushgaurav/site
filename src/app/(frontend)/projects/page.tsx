@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'A collection of my projects',
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
 export default function ProjectsPage() {
   return (
     <Page>
