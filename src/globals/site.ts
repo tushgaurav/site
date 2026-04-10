@@ -13,8 +13,15 @@ export const homepage: GlobalConfig = {
   fields: [
     {
       name: 'heroTitle',
-      type: 'text',
+      type: 'array',
       required: true,
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+        },
+      ],
     },
     {
       name: 'bio',

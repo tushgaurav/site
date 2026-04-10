@@ -549,7 +549,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Homepage {
   id: number;
-  heroTitle: string;
+  heroTitle: {
+    title: string;
+    id?: string | null;
+  }[];
   bio?: string | null;
   featuredArticles?: (number | Article)[] | null;
   updatedAt?: string | null;
@@ -666,7 +669,12 @@ export interface About {
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
-  heroTitle?: T;
+  heroTitle?:
+    | T
+    | {
+        title?: T;
+        id?: T;
+      };
   bio?: T;
   featuredArticles?: T;
   updatedAt?: T;

@@ -16,9 +16,13 @@ export default async function HomePage() {
     depth: 1,
   })
 
+  const pickRandomTitle = (titles: typeof homepage.heroTitle) => {
+    return titles[Math.floor(Math.random() * titles.length)].title
+  }
+
   return (
     <Page>
-      <PageTitle className="mt-10 mb-4">{homepage.heroTitle}</PageTitle>
+      <PageTitle className="mt-10 mb-4">{pickRandomTitle(homepage.heroTitle)}</PageTitle>
       <Paragraph className="mt-4 mb-12 max-w-[60ch] text-gray-400">{homepage.bio}</Paragraph>
       <SocialLinks />
       <ArticlesSection />
