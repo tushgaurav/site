@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   return (
     <Page>
-      <PageTitle>Projects</PageTitle>
+      <PageTitle className="mt-10 mb-4">Projects</PageTitle>
       <Paragraph className="mb-8 text-muted-foreground">
         A collection of side projects, half-finished ideas, and things that actually work (mostly).
       </Paragraph>

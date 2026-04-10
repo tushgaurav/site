@@ -4,6 +4,9 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
 export default async function ProjectsAtGlance() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
