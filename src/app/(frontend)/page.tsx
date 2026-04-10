@@ -4,6 +4,9 @@ import ArticlesSection from './_components/articles'
 import { Page, PageTitle, Paragraph } from '@/components/page'
 import SocialLinks from './_components/social-links'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
 export default async function HomePage() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
