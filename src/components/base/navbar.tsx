@@ -35,6 +35,19 @@ const aboutLinks = [
   },
 ]
 
+const workLinks = [
+  {
+    title: 'Projects',
+    href: '/projects',
+    description: 'In-progress prototypes, notes, and experiments from my personal projects.',
+  },
+  {
+    title: 'Hobbies',
+    href: '/work/hobbies',
+    description: 'Side interests and personal pursuits beyond the keyboard.',
+  },
+]
+
 const exclusivesLinks = [
   {
     title: 'Archives',
@@ -52,6 +65,9 @@ const exclusivesLinks = [
 const mobileNavLinks = [
   { href: '/voice', label: 'Voice' },
   { href: '/archive', label: 'Archive' },
+  { href: '/work/companies', label: 'Companies' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/work/hobbies', label: 'Hobbies' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
@@ -101,22 +117,36 @@ export default function Navbar() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>About</NavigationMenuTrigger>
                 <NavigationMenuContent>
+                  <ul className="grid gap-2 p-1 sm:w-[420px] md:w-[520px] md:grid-cols-2 lg:w-[600px]">
+                    {aboutLinks.map((item) => (
+                      <ListItem key={item.title} title={item.title} href={item.href}>
+                        {item.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Work Section */}
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Work</NavigationMenuTrigger>
+                <NavigationMenuContent>
                   <ul className="grid gap-2 p-1 md:w-[400px] lg:w-[520px] lg:grid-cols-[.75fr_1fr]">
                     <li className="row-span-2">
                       <NavigationMenuLink asChild>
                         <Link
-                          href="/projects"
+                          href="/work/companies"
                           className="from-muted/50 to-muted flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b p-4 no-underline outline-none transition-all duration-200 focus:shadow-md md:p-6"
                         >
-                          <div className="mb-2 text-lg font-semibold sm:mt-4">Projects</div>
+                          <div className="mb-2 text-lg font-semibold sm:mt-4">Companies</div>
                           <p className="text-muted-foreground text-sm leading-tight">
-                            In-progress prototypes, notes, and experiments from my personal
-                            projects.
+                            Professional journey through the companies and teams I&apos;ve been part
+                            of.
                           </p>
                         </Link>
                       </NavigationMenuLink>
                     </li>
-                    {aboutLinks.map((item) => (
+                    {workLinks.map((item) => (
                       <ListItem key={item.title} title={item.title} href={item.href}>
                         {item.description}
                       </ListItem>

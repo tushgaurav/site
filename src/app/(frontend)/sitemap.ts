@@ -44,5 +44,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 0.8,
         },
+        {
+            url: 'https://www.tushgaurav.com/work/companies',
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
+        {
+            url: 'https://www.tushgaurav.com/work/hobbies',
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.7,
+        },
     ]
 }
