@@ -200,6 +200,16 @@
   mix-blend-mode: normal;
 }
 
+::selection {
+  background: black !important;
+  color: white !important;
+}
+
+.dark ::selection {
+  background: white !important;
+  color: black !important;
+}
+
 @utility prose {
   code {
     &::before,
