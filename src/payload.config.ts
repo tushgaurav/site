@@ -19,6 +19,10 @@ import { Projects } from './collections/Projects'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const rejectUnauthorized = process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false'
+const useSSL =
+  process.env.DATABASE_URI?.includes('sslmode=') ||
+  process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== undefined
 
 export default buildConfig({
   admin: {
@@ -40,8 +44,14 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    push: false,
     pool: {
       connectionString: process.env.DATABASE_URI!,
+      ssl: useSSL
+        ? {
+            rejectUnauthorized,
+          }
+        : undefined,
     },
   }),
   sharp,

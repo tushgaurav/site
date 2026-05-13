@@ -21,18 +21,15 @@ importers:
       '@mendable/firecrawl-js':
         specifier: ^4.5.0
         version: 4.5.0
-      '@neondatabase/serverless':
-        specifier: ^1.0.2
-        version: 1.0.2
       '@openai/agents':
         specifier: ^0.3.0
         version: 0.3.0(ws@8.18.3)(zod@4.1.12)
       '@payloadcms/db-postgres':
         specifier: 3.58.0
-        version: 3.58.0(@neondatabase/serverless@1.0.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))
+        version: 3.58.0(@neondatabase/serverless@1.0.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(postgres@3.4.9)
       '@payloadcms/email-resend':
-        specifier: ^3.63.0
-        version: 3.63.0(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))
+        specifier: 3.58.0
+        version: 3.58.0(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))
       '@payloadcms/next':
         specifier: 3.58.0
         version: 3.58.0(@types/react@19.2.7)(graphql@16.11.0)(monaco-editor@0.53.0)(next@16.0.10(@babel/core@7.28.4)(@playwright/test@1.54.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4))(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.7.3)
@@ -43,7 +40,7 @@ importers:
         specifier: 3.58.0
         version: 3.58.0(@faceless-ui/modal@3.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@payloadcms/next@3.58.0(@types/react@19.2.7)(graphql@16.11.0)(monaco-editor@0.53.0)(next@16.0.10(@babel/core@7.28.4)(@playwright/test@1.54.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4))(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.7.3))(@types/react@19.2.7)(monaco-editor@0.53.0)(next@16.0.10(@babel/core@7.28.4)(@playwright/test@1.54.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4))(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.7.3)(yjs@13.6.27)
       '@payloadcms/storage-s3':
-        specifier: ^3.58.0
+        specifier: 3.58.0
         version: 3.58.0(@types/react@19.2.7)(monaco-editor@0.53.0)(next@16.0.10(@babel/core@7.28.4)(@playwright/test@1.54.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4))(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.7.3)
       '@payloadcms/ui':
         specifier: 3.58.0
@@ -101,7 +98,7 @@ importers:
         version: 0.31.5
       drizzle-orm:
         specifier: ^0.44.6
-        version: 0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)
+        version: 0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)(postgres@3.4.9)
       graphql:
         specifier: ^16.8.1
         version: 16.11.0
@@ -123,6 +120,9 @@ importers:
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
+      postgres:
+        specifier: ^3.4.9
+        version: 3.4.9
       posthog-js:
         specifier: ^1.283.0
         version: 1.283.0
@@ -1747,11 +1747,11 @@ packages:
     peerDependencies:
       payload: 3.58.0
 
-  '@payloadcms/email-resend@3.63.0':
-    resolution: {integrity: sha512-esBSu2gFfEPl33U1j+1EMHnejGePIedti36UEE4g/TkPI5in1UGEmnDsh/Rv2k98/+Wcchs6/M5fMn4WmAO6uQ==}
+  '@payloadcms/email-resend@3.58.0':
+    resolution: {integrity: sha512-m9g0g2DKFJh0E3PmT75fYD6yEvE8kKgNYvHXJ5RgDODTxhCdblV3+MohbKHE4mcYB/OkSjjBjYkziKyMACywqA==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
-      payload: 3.63.0
+      payload: 3.58.0
 
   '@payloadcms/graphql@3.58.0':
     resolution: {integrity: sha512-f8akk3of6Bl1Rp4bb6coBczll5IelUOs2mUSQyHvOGKbfz394FsNGX2WSl5DFaelEyyf/cVZpF7tgklvAN+DyA==}
@@ -5956,6 +5956,10 @@ packages:
   postgres-range@1.1.4:
     resolution: {integrity: sha512-i/hbxIE9803Alj/6ytL7UHQxRvZkI9O4Sy+J3HGc4F4oo/2eQAjTSNJ0bfxyse3bH0nuVesCk+3IRLaMtG3H6w==}
 
+  postgres@3.4.9:
+    resolution: {integrity: sha512-GD3qdB0x1z9xgFI6cdRD6xu2Sp2WCOEoe3mtnyB5Ee0XrrL5Pe+e4CCnJrRMnL1zYtRDZmQQVbvOttLnKDLnaw==}
+    engines: {node: '>=12'}
+
   posthog-js@1.283.0:
     resolution: {integrity: sha512-CJJiqK6wPCRTHkmCJ7i8zEDFYded1CURqZ1JSDL4au97TBFX8J50nxw5wI9jHoNlHlkIgfiBPPMDOlBsiIHpMQ==}
 
@@ -8875,6 +8879,7 @@ snapshots:
     dependencies:
       '@types/node': 22.18.8
       '@types/pg': 8.10.2
+    optional: true
 
   '@next/env@15.5.4': {}
 
@@ -8999,13 +9004,13 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@payloadcms/db-postgres@3.58.0(@neondatabase/serverless@1.0.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))':
+  '@payloadcms/db-postgres@3.58.0(@neondatabase/serverless@1.0.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(postgres@3.4.9)':
     dependencies:
-      '@payloadcms/drizzle': 3.58.0(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(pg@8.16.3)
+      '@payloadcms/drizzle': 3.58.0(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(pg@8.16.3)(postgres@3.4.9)
       '@types/pg': 8.10.2
       console-table-printer: 2.12.1
       drizzle-kit: 0.31.4
-      drizzle-orm: 0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)
+      drizzle-orm: 0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)(postgres@3.4.9)
       payload: 3.58.0(graphql@16.11.0)(typescript@5.7.3)
       pg: 8.16.3
       prompts: 2.4.2
@@ -9042,11 +9047,11 @@ snapshots:
       - sqlite3
       - supports-color
 
-  '@payloadcms/drizzle@3.58.0(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(pg@8.16.3)':
+  '@payloadcms/drizzle@3.58.0(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))(pg@8.16.3)(postgres@3.4.9)':
     dependencies:
       console-table-printer: 2.12.1
       dequal: 2.0.3
-      drizzle-orm: 0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)
+      drizzle-orm: 0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)(postgres@3.4.9)
       payload: 3.58.0(graphql@16.11.0)(typescript@5.7.3)
       prompts: 2.4.2
       to-snake-case: 1.0.0
@@ -9087,7 +9092,7 @@ snapshots:
       nodemailer: 6.9.16
       payload: 3.58.0(graphql@16.11.0)(typescript@5.7.3)
 
-  '@payloadcms/email-resend@3.63.0(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))':
+  '@payloadcms/email-resend@3.58.0(payload@3.58.0(graphql@16.11.0)(typescript@5.7.3))':
     dependencies:
       payload: 3.58.0(graphql@16.11.0)(typescript@5.7.3)
 
@@ -11896,17 +11901,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3):
+  drizzle-orm@0.44.2(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)(postgres@3.4.9):
     optionalDependencies:
       '@neondatabase/serverless': 1.0.2
       '@types/pg': 8.10.2
       pg: 8.16.3
+      postgres: 3.4.9
 
-  drizzle-orm@0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3):
+  drizzle-orm@0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.10.2)(pg@8.16.3)(postgres@3.4.9):
     optionalDependencies:
       '@neondatabase/serverless': 1.0.2
       '@types/pg': 8.10.2
       pg: 8.16.3
+      postgres: 3.4.9
 
   dunder-proto@1.0.1:
     dependencies:
@@ -14097,6 +14104,8 @@ snapshots:
   postgres-interval@3.0.0: {}
 
   postgres-range@1.1.4: {}
+
+  postgres@3.4.9: {}
 
   posthog-js@1.283.0:
     dependencies:
