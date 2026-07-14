@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 const SMEAR_COUNT = 18
 const VOID_LINES = 4
@@ -28,15 +28,62 @@ const VOID_BARS = [
 const LINE_NUMS_LEFT = [10, 20, 30, 40, 50]
 const LINE_NUMS_RIGHT = [60, 70, 80, 90, 100]
 
+const STATUS_CYCLE = ["OK", "SUS", "MEH", "404"] as const
+
+const ESC_ROASTS = [
+  "ESC IGNORED. COWARDICE LOGGED.",
+  "HR HAS BEEN NOTIFIED OF YOUR ESCAPE ATTEMPT.",
+  "YOU TYPED ESC INTO THE VOID. THE VOID TYPED BACK.",
+  "STILL HERE. STILL A 404. STILL JUDGING YOU.",
+  "FINE. YOU WIN. STILL A 404.",
+]
+
+const DEAR_USER_QUOTES = [
+  "DEAR USER, YOU ARE STANDING ON A MISSING FLOOR. THE VIEW IS STILL WORTH IT.",
+  "DEAR USER, THIS PAGE GHOSTED YOU FIRST. RESPECT THE HUSTLE.",
+  "DEAR USER, 404 MEANS THE SERVER LOOKED UNDER THE COUCH AND FOUND NOTHING.",
+  "DEAR USER, EVEN THE WAYBACK MACHINE SAID \"YEAH, NO.\"",
+  "DEAR USER, YOUR URL HAD MAIN CHARACTER ENERGY. THE SERVER DISAGREED.",
+]
+
+const TOAST_MS = 2800
+
 export default function NotFound() {
   const router = useRouter()
-  const [escMessage, setEscMessage] = useState<string | null>(null)
+  const pathname = usePathname()
+  const [statusLine, setStatusLine] = useState<string | null>(null)
+  const [statusBadge, setStatusBadge] = useState<(typeof STATUS_CYCLE)[number]>("OK")
+  const [flashBadge, setFlashBadge] = useState<"LOL" | "ERR" | null>(null)
+  const [escCount, setEscCount] = useState(0)
+  const [hardGlitch, setHardGlitch] = useState(false)
+  const [voidFlipped, setVoidFlipped] = useState(false)
+  const [dearQuote] = useState(
+    () => DEAR_USER_QUOTES[Math.floor(Math.random() * DEAR_USER_QUOTES.length)]!,
+  )
+
+  const keyBufferRef = useRef("")
+  const tryAgainClicksRef = useRef<{ count: number; lastAt: number }>({
+    count: 0,
+    lastAt: 0,
+  })
+  const toastTimerRef = useRef<number | null>(null)
+  const rickrollTimerRef = useRef<number | null>(null)
+
+  const showToast = (message: string, flash: "LOL" | "ERR" = "LOL") => {
+    setStatusLine(message)
+    setFlashBadge(flash)
+    if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = window.setTimeout(() => {
+      setStatusLine(null)
+      setFlashBadge(null)
+    }, TOAST_MS)
+  }
 
   const goHome = () => {
     router.push("/")
   }
 
-  const tryAgain = () => {
+  const navigateBackOrHome = () => {
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back()
     } else {
@@ -44,30 +91,105 @@ export default function NotFound() {
     }
   }
 
+  const tryAgain = () => {
+    const now = Date.now()
+    const prev = tryAgainClicksRef.current
+    const count = now - prev.lastAt < 900 ? prev.count + 1 : 1
+    tryAgainClicksRef.current = { count, lastAt: now }
+
+    if (count >= 3) {
+      showToast(
+        "PERSISTENCE IS ADMIRABLE. THE PAGE IS STILL DEAD.",
+        "ERR",
+      )
+      tryAgainClicksRef.current = { count: 0, lastAt: 0 }
+      window.setTimeout(navigateBackOrHome, 1100)
+      return
+    }
+
+    navigateBackOrHome()
+  }
+
+  const cycleStatus = () => {
+    setStatusBadge((prev) => {
+      const i = STATUS_CYCLE.indexOf(prev)
+      return STATUS_CYCLE[(i + 1) % STATUS_CYCLE.length]!
+    })
+  }
+
   useEffect(() => {
+    let escHits = 0
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         e.preventDefault()
         router.push("/")
-      } else if (e.key === "Escape") {
+        return
+      }
+
+      if (e.key === "Escape") {
         e.preventDefault()
-        setEscMessage("ESC IGNORED. COWARDICE LOGGED.")
+        escHits += 1
+        setEscCount(escHits)
+        const roast =
+          ESC_ROASTS[Math.min(escHits - 1, ESC_ROASTS.length - 1)]!
+        showToast(roast, "ERR")
+        if (escHits >= 5) {
+          setHardGlitch(true)
+          window.setTimeout(() => setHardGlitch(false), 1000)
+        }
+        return
+      }
+
+      if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const ch = e.key.toLowerCase()
+        keyBufferRef.current = (keyBufferRef.current + ch).slice(-8)
+
+        if (keyBufferRef.current.endsWith("sudo")) {
+          keyBufferRef.current = ""
+          showToast("NICE TRY. INCIDENT REPORTED TO SANTA.", "ERR")
+          return
+        }
+
+        if (keyBufferRef.current.endsWith("help")) {
+          keyBufferRef.current = ""
+          showToast("ENTER=HOME ESC=ROAST SUDO=DENIED R=??", "LOL")
+          return
+        }
+
+        if (ch === "r") {
+          showToast("LOADING ABSOLUTE BANGER...", "LOL")
+          if (rickrollTimerRef.current) {
+            window.clearTimeout(rickrollTimerRef.current)
+          }
+          rickrollTimerRef.current = window.setTimeout(() => {
+            showToast(
+              "NEVER GONNA GIVE YOU UP — ALSO NEVER GONNA FIND THIS PAGE.",
+              "ERR",
+            )
+          }, 900)
+        }
       }
     }
 
     window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+      if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current)
+      if (rickrollTimerRef.current) {
+        window.clearTimeout(rickrollTimerRef.current)
+      }
+    }
+    // showToast only uses setState; safe to omit from deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
-  useEffect(() => {
-    if (!escMessage) return
-    const t = window.setTimeout(() => setEscMessage(null), 2800)
-    return () => window.clearTimeout(t)
-  }, [escMessage])
+  const displayBadge = flashBadge ?? statusBadge
+  const missingPath = pathname || "/???"
 
   return (
     <div
-      className="bsod fixed inset-0 z-[100] flex flex-col overflow-hidden font-mono uppercase text-white"
+      className={`bsod fixed inset-0 z-[100] flex flex-col overflow-hidden font-mono uppercase text-white${hardGlitch ? " bsod-hard-glitch" : ""}`}
       role="alert"
       aria-live="polite"
     >
@@ -77,15 +199,21 @@ export default function NotFound() {
         <span className="hidden text-center sm:block">
           404 ERROR : PAGE NOT FOUND
         </span>
-        <span className="tabular-nums opacity-70" aria-hidden="true">
-          {escMessage ? "ERR" : "OK"}
-        </span>
+        <button
+          type="button"
+          onClick={cycleStatus}
+          className="tabular-nums opacity-70 transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="Cycle status badge"
+          title="CLICK ME"
+        >
+          {displayBadge}
+        </button>
       </header>
 
       {/* Main grid */}
       <div className="relative min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-6">
         <div className="mx-auto grid h-full max-w-[1400px] grid-cols-1 gap-6 text-[9px] leading-relaxed tracking-wide sm:text-[10px] md:grid-cols-[1fr_1.4fr_1fr] md:gap-4 lg:gap-8 lg:text-[11px]">
-          {/* Left — system status (order 2 on mobile) */}
+          {/* Left — system status */}
           <aside className="order-2 space-y-1 opacity-90 md:order-1">
             <p>SYSTEM: TUSHGAURAV.COM_404_HANDLER</p>
             <p>RUNNING ERROR ROUTINE...</p>
@@ -94,13 +222,20 @@ export default function NotFound() {
             <p>LOC 004: ATTEMPTED TO LOAD RESOURCE [404.PAGE]</p>
             <p className="mt-3">STATUS: NULL_POINTER_REFERENCE</p>
             <p>RETURN CODE: -404</p>
+            <p className="mt-3">CAUSE: YOU TYPED IT WITH YOUR WHOLE CHEST</p>
+            <p>SUGGESTION: TOUCH GRASS.EXE</p>
+            <p className="mt-3 opacity-70">COFFEE: CRITICALLY LOW</p>
+            <p className="opacity-70">RAM: REPLACED WITH GOOD INTENTIONS</p>
+            <p className="opacity-70">EGO: STILL COMPILING</p>
             <p className="mt-4 opacity-60">
               STACK: REQUEST → ROUTER → VOID → HERE
             </p>
-            <p className="opacity-60">PID: 0x0F04 · TICKS: ∞</p>
+            <p className="opacity-60">
+              PID: 0x0F04 · TICKS: ∞ · ESC HITS: {escCount}
+            </p>
           </aside>
 
-          {/* Middle — recovery (first on mobile) */}
+          {/* Middle — recovery */}
           <section className="order-1 md:order-2">
             <h1 className="mb-4 text-xs tracking-widest sm:text-sm md:hidden">
               404 ERROR : PAGE NOT FOUND
@@ -113,7 +248,7 @@ export default function NotFound() {
                 <p>0003 OPEN /ABOUT</p>
                 <p>0004 CALL /PROJECTS</p>
                 <p>0005 JUMP /ARCHIVE</p>
-                <p className="opacity-50">0006 EXIT — FAILED</p>
+                <p className="opacity-50">0006 EXIT — FAILED (AS USUAL)</p>
 
                 <pre
                   className="my-4 select-none text-[10px] leading-tight tracking-tighter opacity-80 sm:text-xs"
@@ -127,6 +262,10 @@ export default function NotFound() {
                 <p className="mt-2 max-w-md">
                   IF LOST == TRUE THEN PRINT &quot;ART IS NEVER LOST — ONLY
                   MISPLACED.&quot;
+                </p>
+                <p className="max-w-md opacity-70">
+                  ELSE PRINT &quot;SKILL ISSUE. HAVE YOU TRIED TURNING IT OFF AND
+                  ON AGAIN?&quot;
                 </p>
 
                 <nav className="mt-5 space-y-1" aria-label="Recovery options">
@@ -145,7 +284,6 @@ export default function NotFound() {
                     >
                       &gt; GO HOME
                     </Link>
-                    {/* Vertical smear trail */}
                     <div
                       className="bsod-smear pointer-events-none absolute left-0 top-[1.1em] select-none"
                       aria-hidden="true"
@@ -171,7 +309,6 @@ export default function NotFound() {
                 </nav>
               </div>
 
-              {/* Line number gutters — desktop */}
               <div
                 className="hidden shrink-0 flex-col justify-between py-1 text-[9px] tabular-nums opacity-40 md:flex"
                 aria-hidden="true"
@@ -198,31 +335,44 @@ export default function NotFound() {
             <p>NOTE_02: SOMETIMES LOSS CREATES FORM.</p>
             <p>NOTE_03: THE MAP IS NOT THE TERRITORY.</p>
             <p>NOTE_04: MISSING PAGES STILL CAST SHADOWS.</p>
+            <p>NOTE_05: 404 IS JUST 200 WEARING A DISGUISE.</p>
+            <p>NOTE_06: THIS PAGE LEFT TO PURSUE OTHER INTERESTS.</p>
+            <p>NOTE_07: HAVE YOU CHECKED UNDER /DEV/NULL?</p>
 
             <p className="mt-4 opacity-80">
               [MEMORY DUMP /DEV/TUSHGAURAV/LOGS/404]
             </p>
+            <p className="opacity-70">GHOST REQUEST: {missingPath}</p>
             <p className="opacity-70">
               01 GHOST REQUEST RECEIVED — NO HANDLER BOUND
             </p>
             <p className="opacity-70">
               02 POETIC REDUNDANCY DETECTED IN VOID BUFFER
             </p>
-            <p className="mt-3 max-w-xs opacity-90">
-              &quot;DEAR USER, YOU ARE STANDING ON A MISSING FLOOR. THE VIEW IS
-              STILL WORTH IT.&quot;
+            <p className="opacity-70">
+              03 IMPOSTER SYNDROME LOADED SUCCESSFULLY (UNFORTUNATELY)
             </p>
+            <p className="mt-3 max-w-xs opacity-90">&quot;{dearQuote}&quot;</p>
 
             <div className="relative mt-4">
-              {Array.from({ length: VOID_LINES }, (_, i) => (
-                <p
-                  key={i}
-                  className="bsod-void-line opacity-90"
-                  style={{ animationDelay: `${i * 0.15}s` }}
-                >
-                  &gt;&gt;&gt; ATTEMPTING TO RENDER THE VOID AS TEXT...
-                </p>
-              ))}
+              <button
+                type="button"
+                onClick={() => setVoidFlipped(true)}
+                className="w-full cursor-pointer text-left focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white"
+                aria-label="Poke the void"
+              >
+                {Array.from({ length: VOID_LINES }, (_, i) => (
+                  <p
+                    key={i}
+                    className="bsod-void-line opacity-90"
+                    style={{ animationDelay: `${i * 0.15}s` }}
+                  >
+                    {voidFlipped
+                      ? ">>> VOID SAYS: GO HOME, NERD."
+                      : ">>> ATTEMPTING TO RENDER THE VOID AS TEXT..."}
+                  </p>
+                ))}
+              </button>
 
               <div
                 className="bsod-void-bars mt-1 flex items-start gap-[3px] overflow-hidden"
@@ -245,14 +395,12 @@ export default function NotFound() {
         </div>
       </div>
 
-      {/* Esc toast */}
-      {escMessage && (
+      {statusLine && (
         <div className="pointer-events-none absolute bottom-14 left-1/2 z-20 -translate-x-1/2 px-3 text-center text-[10px] tracking-widest sm:text-xs">
-          {escMessage}
+          {statusLine}
         </div>
       )}
 
-      {/* Bottom bar */}
       <footer className="flex shrink-0 flex-col gap-1 border-t border-white/20 px-3 py-3 text-[9px] tracking-wider sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:text-[10px] lg:text-xs">
         <span>&gt; 404 PAGE NOT FOUND</span>
         <button
@@ -263,7 +411,7 @@ export default function NotFound() {
           &gt; PRESS ENTER TO REBOOT
         </button>
         <span className="opacity-80 sm:text-right">
-          OR PRESS ESC IF YOU DARE.
+          OR PRESS ESC IF YOU DARE. (TYPE HELP)
         </span>
       </footer>
 
@@ -291,6 +439,27 @@ export default function NotFound() {
           }
         }
 
+        @keyframes bsod-hard-glitch {
+          0%, 100% {
+            transform: translate(0);
+            filter: none;
+          }
+          20% {
+            transform: translate(-3px, 1px);
+            filter: hue-rotate(20deg);
+          }
+          40% {
+            transform: translate(4px, -2px);
+          }
+          60% {
+            transform: translate(-2px, 2px);
+            filter: hue-rotate(-15deg);
+          }
+          80% {
+            transform: translate(2px, -1px);
+          }
+        }
+
         @keyframes bsod-void-pulse {
           0%, 100% {
             opacity: 0.85;
@@ -314,6 +483,14 @@ export default function NotFound() {
 
         .bsod-smear {
           animation: bsod-smear-jitter 4s steps(2, end) infinite;
+        }
+
+        .bsod-hard-glitch .bsod-smear {
+          animation: bsod-smear-jitter 0.15s steps(2, end) infinite;
+        }
+
+        .bsod-hard-glitch {
+          animation: bsod-hard-glitch 0.35s steps(2, end) 3;
         }
 
         .bsod-void-line {
