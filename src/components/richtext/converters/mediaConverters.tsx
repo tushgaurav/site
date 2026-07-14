@@ -11,10 +11,29 @@ export const uploadConverter: JSXConverters<SerializedUploadNode> = {
       return null
     }
 
-    const { url, alt, width, height, filename } = value as Media
+    const { url, alt, width, height, filename, mimeType } = value as Media
 
     if (!url) {
       return null
+    }
+
+    if (mimeType?.startsWith('video/')) {
+      return (
+        <figure className="my-8">
+          <video
+            src={url}
+            controls
+            playsInline
+            preload="metadata"
+            className="rounded-lg shadow-md w-full h-auto"
+          >
+            Your browser does not support the video tag.
+          </video>
+          {alt ? (
+            <figcaption className="mt-2 text-sm text-muted-foreground">{alt}</figcaption>
+          ) : null}
+        </figure>
+      )
     }
 
     return (
