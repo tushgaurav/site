@@ -175,9 +175,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         />
       </div>
 
-      <div className="mx-auto grid gap-x-10 xl:grid-cols-[1fr_300px]">
-        <RichText data={article.content} />
-        <aside className="sticky top-20 self-start h-fit">
+      <div className="mx-auto grid min-w-0 gap-x-10 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <RichText className="min-w-0 max-w-full" data={article.content} />
+        <aside className="sticky top-20 h-fit min-w-0 self-start">
           <MoreArticles currentArticleSlug={slug} />
           <ShareThis />
         </aside>

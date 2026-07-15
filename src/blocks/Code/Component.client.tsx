@@ -13,7 +13,7 @@ export const Code: React.FC<Props> = ({ code, language = 'typescript', filename 
   if (!code) return null
 
   return (
-    <div className="not-prose my-4">
+    <div className="not-prose my-4 min-w-0 max-w-full">
       {/* Header with filename and copy button */}
       {(filename || language) && (
         <div className="flex items-center justify-between bg-muted/50 border border-border rounded-t-lg px-4 py-2">
@@ -33,7 +33,7 @@ export const Code: React.FC<Props> = ({ code, language = 'typescript', filename 
       <Highlight theme={themes.gruvboxMaterialDark} code={code} language={language}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={`${className} text-sm overflow-x-auto p-4 ${filename || language ? 'rounded-b-lg' : 'rounded-lg'} border border-border ${filename || language ? 'border-t-0' : ''}`}
+            className={`${className} max-w-full overflow-x-auto p-4 text-sm ${filename || language ? 'rounded-b-lg' : 'rounded-lg'} border border-border ${filename || language ? 'border-t-0' : ''}`}
             style={style}
           >
             {!filename && !language && (
