@@ -63,6 +63,7 @@ const exclusivesLinks = [
 ]
 
 const mobileNavLinks = [
+  { href: '/writing', label: 'Writing' },
   { href: '/voice', label: 'Voice' },
   { href: '/archive', label: 'Archive' },
   { href: '/work/companies', label: 'Companies' },
@@ -167,6 +168,12 @@ export default function Navbar() {
                     ))}
                   </ul>
                 </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                  <Link href="/writing">Writing</Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>

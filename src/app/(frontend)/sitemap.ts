@@ -15,10 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
-            url: 'https://www.tushgaurav.com/article',
+            url: 'https://www.tushgaurav.com/writing',
             lastModified: new Date(),
             changeFrequency: 'weekly',
-            priority: 0.5,
+            priority: 0.9,
         },
         {
             url: 'https://www.tushgaurav.com/contact',

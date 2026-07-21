@@ -1,50 +1,92 @@
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 import config from '@/payload.config'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Media } from '@/payload-types'
+import type { Article, Media } from '@/payload-types'
 
-export default async function MoreArticles({ currentArticleSlug }: { currentArticleSlug: string }) {
+export default async function MoreArticles({
+  currentArticleSlug,
+  tags,
+}: {
+  currentArticleSlug: string
+  tags?: string[] | null
+}) {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const { docs: articles } = await payload.find({
-    collection: 'articles',
-    where: {
-      slug: {
-        not_equals: currentArticleSlug,
-      },
-    },
-    limit: 3,
-  })
+  const baseConditions: Where[] = [
+    { status: { equals: 'published' } },
+    { unlisted: { equals: false } },
+    { slug: { not_equals: currentArticleSlug } },
+  ]
 
-  const recommendedArticles = articles.slice(0, 3)
+  let articles: Article[] = []
+
+  if (tags && tags.length > 0) {
+    const { docs } = await payload.find({
+      collection: 'articles',
+      where: { and: [...baseConditions, { tags: { in: tags } }] },
+      sort: '-publishedAt',
+      limit: 3,
+    })
+    articles = docs
+  }
+
+  const hasRelated = articles.length > 0
+
+  if (articles.length < 3) {
+    const excludeSlugs = articles.map((article) => article.slug)
+    const { docs } = await payload.find({
+      collection: 'articles',
+      where: {
+        and: [
+          ...baseConditions,
+          ...(excludeSlugs.length > 0 ? [{ slug: { not_in: excludeSlugs } }] : []),
+        ],
+      },
+      sort: '-publishedAt',
+      limit: 3 - articles.length,
+    })
+    articles = [...articles, ...docs]
+  }
+
+  if (articles.length === 0) return null
 
   return (
     <div className="mt-10 max-w-lg">
-      <h4 className="uppercase text-sm text-muted-foreground font-semibold mb-4">More Articles</h4>
+      <h4 className="uppercase text-sm text-muted-foreground font-semibold mb-4">
+        {hasRelated ? 'Related' : 'More Articles'}
+      </h4>
       <div className="flex flex-col gap-6">
-        {recommendedArticles.map((article) => (
-          <Link
-            key={article.slug}
-            href={`/article/${article.slug}`}
-            className="grid grid-cols-[1.4fr_1fr] gap-4 group"
-          >
-            <div>
-              <h5 className="text-sm font-semibold line-clamp-2 group-hover:text-muted-foreground transition-colors">
-                {article.title}
-              </h5>
-              <p className="text-sm text-muted-foreground line-clamp-2">{article.excerpt}</p>
-            </div>
-            <Image
-              src={(article.featuredImage as Media)?.url!}
-              alt={(article.featuredImage as Media)?.alt!}
-              width={200}
-              height={150}
-              className="rounded-xl h-full w-full object-cover"
-            />
-          </Link>
-        ))}
+        {articles.map((article) => {
+          const image = article.featuredImage as Media | null
+
+          return (
+            <Link
+              key={article.slug}
+              href={`/article/${article.slug}`}
+              className="grid grid-cols-[1.4fr_1fr] gap-4 group"
+            >
+              <div>
+                <h5 className="text-sm font-semibold line-clamp-2 group-hover:text-muted-foreground transition-colors">
+                  {article.title}
+                </h5>
+                <p className="text-sm text-muted-foreground line-clamp-2">{article.excerpt}</p>
+              </div>
+              {image?.url ? (
+                <Image
+                  src={image.url}
+                  alt={image.alt || article.title}
+                  width={200}
+                  height={150}
+                  className="rounded-xl h-full w-full object-cover"
+                />
+              ) : (
+                <div className="rounded-xl h-full w-full bg-muted" />
+              )}
+            </Link>
+          )
+        })}
       </div>
     </div>
   )
