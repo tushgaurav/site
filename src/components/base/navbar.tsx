@@ -55,12 +55,6 @@ const exclusivesLinks = [
     description: 'A complete collection of articles, tutorials, and project write-ups.',
   },
   {
-    title: 'Voice',
-    href: '/voice',
-    description:
-      'Voice-enabled AI assistant for natural conversations about code, projects, or life.',
-  },
-  {
     title: 'Quotes',
     href: '/quotes',
     description: 'A collection of words worth keeping, served one at a time.',
@@ -69,7 +63,6 @@ const exclusivesLinks = [
 
 const mobileNavLinks = [
   { href: '/writing', label: 'Writing' },
-  { href: '/voice', label: 'Voice' },
   { href: '/archive', label: 'Archive' },
   { href: '/quotes', label: 'Quotes' },
   { href: '/work/companies', label: 'Companies' },
